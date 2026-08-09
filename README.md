@@ -17,7 +17,7 @@ A guided, local-first terminal catalog for researching delisted Steam games,
 browsing games, DLC, and demos, and opening only verified Steam-supported actions.
 
 [![CI](https://github.com/tugrakaymakcioglu/SteamGraveyard/actions/workflows/tests.yml/badge.svg)](https://github.com/tugrakaymakcioglu/SteamGraveyard/actions/workflows/tests.yml)
-[![Version 1.1](https://img.shields.io/badge/version-1.1.0-66d9ef)](CHANGELOG.md)
+[![Version 0.1.1](https://img.shields.io/badge/version-0.1.1-66d9ef)](CHANGELOG.md)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
 [![Textual](https://img.shields.io/badge/UI-Textual-6f42c1)](https://textual.textualize.io/)
@@ -39,23 +39,21 @@ to the official Steam client.
 > opens Steam-supported URI actions. Steam decides whether a license or installation is available
 > for an account. AppIDs and package/SubIDs do not grant ownership.
 
-![SteamGraveyard interface preview](docs/screenshot.svg)
+## Product tour
 
-## New in 1.1
+<p align="center">
+  <img src="docs/images/quick-tour.gif" alt="SteamGraveyard guided setup, catalog, categories, and game details" width="960">
+</p>
 
-[Read the complete SteamGraveyard 1.1 release notes](docs/releases/v1.1.0.md).
+| Guided setup | Local-first catalog |
+| --- | --- |
+| ![Guided Steam Web API key setup](docs/images/onboarding.png) | ![Paged SteamGraveyard catalog](docs/images/catalog.png) |
+| **Category browsing** | **Evidence-rich details** |
+| ![Curated demo category](docs/images/demo-category.png) | ![Game detail and source view](docs/images/detail.png) |
 
-- **Guided first launch** — the TUI explains where to create a Steam Web API key, validates it with
-  one read-only request, and lets users continue offline.
-- **Secure by default** — validated keys are stored in Windows Credential Manager, macOS Keychain,
-  or Linux Secret Service when a backend is available; they are never written to the dataset.
-- **Category browser** — switch between games, DLC, curated demos, verified-free items, and
-  delisted records from one dropdown.
-- **One-click handoff** — verified items expose an explicit button that delegates to the official
-  Steam client; unverified items keep the button disabled.
-- **SteamDB research links** — open the matching SteamDB page on demand without scraping or
-  automatically fetching SteamDB.
-- **Windows double-click launcher** — first-time setup and later launches use the same file.
+## Latest release
+
+[SteamGraveyard 0.1.1](docs/releases/v0.1.1.md): Known issues fixed.
 
 ## Why SteamGraveyard
 
@@ -82,7 +80,7 @@ instead of closing silently. Run the same file every time; setup is idempotent.
 ### Install from GitHub
 
 ```bash
-python -m pip install "git+https://github.com/tugrakaymakcioglu/SteamGraveyard.git@v1.1.0"
+python -m pip install "git+https://github.com/tugrakaymakcioglu/SteamGraveyard.git@v0.1.1"
 steam-graveyard
 ```
 
@@ -298,7 +296,7 @@ but keeps both delisting and claimability conservative where the available evide
 their current state. SteamGraveyard never upgrades historical context into a current claimability
 claim.
 
-Version 1.1 also includes source-timestamped examples for Team Fortress 2, Counter-Strike 2, and
+Version 0.1.1 also includes source-timestamped examples for Team Fortress 2, Counter-Strike 2, and
 the We Were Here Tomorrow Demo, verified as free-to-play or a free demo on their official Steam
 Store pages on the dataset date. These checks can become stale and do not override Steam's
 account-level decision.
@@ -337,12 +335,13 @@ belong in the private process described by [SECURITY.md](SECURITY.md), not in pu
 
 ## Roadmap
 
-- **V1:** TUI, search, SQLite dataset, safe Steam URI launcher, snapshot diff, claim status, exports
-- **V1.1:** guided secure setup, category browser, game/DLC scans, verified one-click handoff,
+- **V0.1.0:** TUI, search, SQLite dataset, safe Steam URI launcher, snapshot diff, claim status,
+  exports
+- **V0.1.1:** guided secure setup, category browser, game/DLC scans, verified one-click handoff,
   SteamDB research links, Windows double-click launcher
-- **V1.2:** anonymous SteamKit/PICS enrichment worker, reviewed demo/package relationships,
+- **V0.2.0:** anonymous SteamKit/PICS enrichment worker, reviewed demo/package relationships,
   signed versioned metadata releases
-- **V2:** optional remote API, web dashboard, notifications, historical catalog analysis
+- **V1.0.0:** optional remote API, web dashboard, notifications, historical catalog analysis
 
 Authenticated Steam account features remain outside the desktop scope. They would require a
 separate security and privacy review before any future design work.

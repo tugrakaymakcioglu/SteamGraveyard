@@ -83,6 +83,10 @@ async def test_api_key_validation_is_small_and_friendly() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         body = json.loads(request.url.params["input_json"])
         assert body["max_results"] == 1
+        assert request.url.host == "api.steampowered.com"
+        assert request.headers["x-webapi-key"] == secret
+        assert "key" not in request.url.params
+        assert secret not in str(request.url)
         return httpx.Response(403)
 
     secret = "b" * 32
@@ -90,6 +94,33 @@ async def test_api_key_validation_is_small_and_friendly() -> None:
     result = await client.validate_api_key()
     assert not result.valid
     assert secret not in result.message
+
+
+@pytest.mark.asyncio
+async def test_api_key_validation_accepts_public_endpoint_response() -> None:
+    secret = "c" * 32
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.host == "api.steampowered.com"
+        assert request.headers["x-webapi-key"] == secret
+        return httpx.Response(
+            200,
+            json={
+                "response": {
+                    "apps": [{"appid": 10, "name": "Ten"}],
+                    "have_more_results": True,
+                    "last_appid": 10,
+                }
+            },
+        )
+
+    result = await SteamCatalogClient(
+        secret,
+        max_retries=0,
+        client_factory=client_factory(handler),
+    ).validate_api_key()
+    assert result.valid
+    assert result.message == "Steam accepted the API key."
 
 
 @pytest.mark.asyncio

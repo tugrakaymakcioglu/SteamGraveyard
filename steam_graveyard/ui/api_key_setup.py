@@ -51,7 +51,7 @@ class ApiKeySetupScreen(Screen[None]):
 
     def compose(self) -> ComposeResult:
         instructions = (
-            "[bold #66d9ef]WELCOME TO STEAMGRAVEYARD 1.1[/]\n\n"
+            "[bold #66d9ef]WELCOME TO STEAMGRAVEYARD 0.1.1[/]\n\n"
             "A Steam Web API key lets the app build a current game and DLC catalog. "
             "It does not give SteamGraveyard access to your password, purchases, or account.\n\n"
             "[bold]1.[/] Sign in to Steam in your browser.\n"

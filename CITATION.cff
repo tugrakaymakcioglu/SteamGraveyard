@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If SteamGraveyard supports your research, please cite this repository."
 title: "SteamGraveyard"
 type: software
-version: 1.1.0
+version: 0.1.1
 date-released: 2026-08-09
 authors:
   - family-names: Kaymakcioglu

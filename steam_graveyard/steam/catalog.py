@@ -14,7 +14,7 @@ import httpx
 from steam_graveyard.errors import CatalogError, ConfigurationError
 from steam_graveyard.models import CatalogEntry, ContentType
 
-CATALOG_ENDPOINT = "https://partner.steam-api.com/IStoreService/GetAppList/v1/"
+CATALOG_ENDPOINT = "https://api.steampowered.com/IStoreService/GetAppList/v1/"
 
 
 @dataclass(frozen=True, slots=True)
@@ -77,7 +77,7 @@ class SteamCatalogClient:
             async with self._client_factory() as client:
                 response = await self._request_with_retry(
                     client,
-                    params={"key": self.api_key, "input_json": json.dumps(body)},
+                    params={"input_json": json.dumps(body)},
                 )
             document = response.json()
             if not isinstance(document, dict):
@@ -109,7 +109,7 @@ class SteamCatalogClient:
                 }
                 response = await self._request_with_retry(
                     client,
-                    params={"key": self.api_key, "input_json": json.dumps(body)},
+                    params={"input_json": json.dumps(body)},
                 )
                 document = response.json()
                 if not isinstance(document, dict):
@@ -159,7 +159,11 @@ class SteamCatalogClient:
     ) -> httpx.Response:
         for attempt in range(self.max_retries + 1):
             try:
-                response = await client.get(CATALOG_ENDPOINT, params=params)
+                response = await client.get(
+                    CATALOG_ENDPOINT,
+                    params=params,
+                    headers={"x-webapi-key": self.api_key or ""},
+                )
             except httpx.RequestError as exc:
                 if attempt >= self.max_retries:
                     raise CatalogError(

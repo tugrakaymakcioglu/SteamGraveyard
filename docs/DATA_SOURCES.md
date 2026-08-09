@@ -3,7 +3,7 @@
 SteamGraveyard separates current catalog facts, historical observations, and claimability evidence.
 No single Steam endpoint provides all three.
 
-## V1.1 source policy
+## V0.1.1 source policy
 
 | Need | Source | Automation | Trust boundary |
 | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ SteamDB's complete history immediately:
 - a long-running history must be accumulated over time rather than inferred retroactively.
 
 Bundling SteamKit directly in the beginner desktop path would add a .NET runtime and a persistent
-Steam-network client. V1.1 keeps the desktop install Python-only. The planned V1.2 design runs the
+Steam-network client. V0.1.1 keeps the desktop install Python-only. The planned V0.2.0 design runs the
 anonymous enrichment worker in repository automation, validates and signs its output, and lets the
 desktop consume the static dataset without receiving a Steam password, cookie, or session token.
 

@@ -12,7 +12,7 @@ runner = CliRunner()
 def test_version() -> None:
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "SteamGraveyard 1.1.0" in result.stdout
+    assert "SteamGraveyard 0.1.1" in result.stdout
 
 
 def test_cli_search_and_game_bootstrap_seed(tmp_path: Path) -> None:
