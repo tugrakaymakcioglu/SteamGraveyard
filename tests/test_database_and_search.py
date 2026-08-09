@@ -8,7 +8,7 @@ import pytest
 from steam_graveyard.config import Settings
 from steam_graveyard.database.repository import GameRepository
 from steam_graveyard.errors import DatabaseCorruptionError
-from steam_graveyard.models import DelistingStatus, Game, Source
+from steam_graveyard.models import ContentType, DelistingStatus, Game, Source
 from steam_graveyard.services.search import SearchService
 
 
@@ -19,6 +19,35 @@ def test_repository_bootstraps_packaged_seed(settings: Settings) -> None:
     assert game is not None
     assert game.name == "LawBreakers"
     assert game.claim_status.value == "UNKNOWN"
+
+
+def test_repository_merges_new_seed_once_without_overwriting_history(
+    settings: Settings, now: datetime
+) -> None:
+    repo = GameRepository(settings)
+    repo.initialize(seed=False)
+    repo.upsert_game(
+        Game(
+            appid=350280,
+            name="LawBreakers",
+            metadata={"preserved": True},
+            first_seen=now,
+            last_seen=now,
+        )
+    )
+
+    repo.initialize()
+    assert repo.stats().game_count == 4
+    assert repo.stats().claimable_count == 3
+    assert repo.stats().demo_count == 1
+    assert repo.get_game(350280).metadata["preserved"] is True  # type: ignore[union-attr]
+    first_event_count = len(repo.latest_events(limit=100))
+
+    repo.initialize()
+    assert len(repo.latest_events(limit=100)) == first_event_count
+    with repo.connection() as connection:
+        assert connection.execute("PRAGMA user_version").fetchone()[0] == 3
+        assert connection.execute("SELECT COUNT(*) FROM seed_revisions").fetchone()[0] == 1
 
 
 def test_repository_crud_stats_and_indexes(repository: GameRepository, now: datetime) -> None:
@@ -41,8 +70,19 @@ def test_repository_crud_stats_and_indexes(repository: GameRepository, now: date
             last_seen=now,
         )
     )
-    assert [game.appid for game in repository.list_games()] == [2, 1]
-    assert repository.stats().game_count == 2
+    repository.upsert_game(
+        Game(
+            appid=3,
+            name="Expansion",
+            type=ContentType.DLC,
+            first_seen=now,
+            last_seen=now,
+        )
+    )
+    assert [game.appid for game in repository.list_games()] == [2, 1, 3]
+    assert repository.stats().game_count == 3
+    assert repository.stats().dlc_count == 1
+    assert repository.list_games(content_type="dlc")[0].appid == 3
     assert repository.list_games(delisting_status="DELISTED")[0].appid == 2
 
 

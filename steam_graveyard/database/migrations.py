@@ -108,7 +108,29 @@ def _migration_1(connection: sqlite3.Connection) -> None:
     )
 
 
-MIGRATIONS: tuple[Callable[[sqlite3.Connection], None], ...] = (_migration_1,)
+def _migration_2(connection: sqlite3.Connection) -> None:
+    connection.execute(
+        "CREATE INDEX IF NOT EXISTS idx_games_type_status "
+        "ON games(type, delisting_status, popularity_score DESC)"
+    )
+
+
+def _migration_3(connection: sqlite3.Connection) -> None:
+    connection.execute(
+        """
+        CREATE TABLE IF NOT EXISTS seed_revisions (
+            revision INTEGER PRIMARY KEY,
+            applied_at TEXT NOT NULL
+        )
+        """
+    )
+
+
+MIGRATIONS: tuple[Callable[[sqlite3.Connection], None], ...] = (
+    _migration_1,
+    _migration_2,
+    _migration_3,
+)
 
 
 def migrate(connection: sqlite3.Connection) -> None:

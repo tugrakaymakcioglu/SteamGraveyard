@@ -16,14 +16,26 @@ from typing import Any
 from steam_graveyard.config import Settings
 from steam_graveyard.database.migrations import migrate
 from steam_graveyard.errors import DatabaseCorruptionError, DatabaseError
-from steam_graveyard.models import Event, EventType, Game, Source, VerificationRecord
+from steam_graveyard.models import (
+    ClaimStatus,
+    Event,
+    EventType,
+    Game,
+    Source,
+    VerificationRecord,
+)
 from steam_graveyard.services.differ import DiffSummary
+
+SEED_REVISION = 2
 
 
 @dataclass(frozen=True, slots=True)
 class DatasetStats:
     game_count: int
     claimable_count: int
+    dlc_count: int
+    demo_count: int
+    delisted_count: int
     last_update: datetime | None
 
 
@@ -94,8 +106,20 @@ class GameRepository:
                         "Keep the file for recovery and choose a new data directory."
                     )
                 count = int(connection.execute("SELECT COUNT(*) FROM games").fetchone()[0])
-                if seed and count == 0:
-                    self._load_seed(connection)
+                if seed:
+                    applied = connection.execute(
+                        "SELECT 1 FROM seed_revisions WHERE revision = ?", (SEED_REVISION,)
+                    ).fetchone()
+                    if applied is None:
+                        if count == 0:
+                            self._load_seed(connection)
+                        else:
+                            self._merge_packaged_seed(connection)
+                        with connection:
+                            connection.execute(
+                                "INSERT INTO seed_revisions(revision, applied_at) VALUES (?, ?)",
+                                (SEED_REVISION, datetime.now(UTC).isoformat()),
+                            )
         except DatabaseCorruptionError:
             raise
         except sqlite3.DatabaseError as exc:
@@ -121,18 +145,7 @@ class GameRepository:
                 if source.id is not None:
                     source_id_map[source.id] = database_id
             for original_game in payload.get("games", []):
-                raw_game = dict(original_game)
-                source_url = raw_game.pop("verification_source_url", None)
-                if source_url and raw_game.get("claim_status") != "UNKNOWN":
-                    raw_game["verification_source_id"] = source_ids[source_url]
-                old_source_id = raw_game.get("verification_source_id")
-                if old_source_id is not None:
-                    raw_game["verification_source_id"] = source_id_map.get(
-                        int(old_source_id), int(old_source_id)
-                    )
-                if "metadata_json" in raw_game:
-                    raw_game["metadata"] = raw_game.pop("metadata_json")
-                game = Game.model_validate(raw_game)
+                game = self._seed_game(original_game, source_ids, source_id_map)
                 self._upsert_game(connection, game)
             for raw_verification in payload.get("verification_history", []):
                 verification = VerificationRecord.model_validate(raw_verification)
@@ -162,6 +175,119 @@ class GameRepository:
                 ]
             for raw_event in raw_events:
                 self._insert_event(connection, Event.model_validate(raw_event))
+
+    @staticmethod
+    def _seed_game(
+        original_game: object,
+        source_ids: dict[str, int],
+        source_id_map: dict[int, int],
+    ) -> Game:
+        if not isinstance(original_game, dict):
+            raise DatabaseError("The packaged seed contains an invalid game record.")
+        raw_game = dict(original_game)
+        source_url = raw_game.pop("verification_source_url", None)
+        if source_url and raw_game.get("claim_status") != "UNKNOWN":
+            raw_game["verification_source_id"] = source_ids[str(source_url)]
+        old_source_id = raw_game.get("verification_source_id")
+        if old_source_id is not None:
+            raw_game["verification_source_id"] = source_id_map.get(
+                int(old_source_id), int(old_source_id)
+            )
+        if "metadata_json" in raw_game:
+            raw_game["metadata"] = raw_game.pop("metadata_json")
+        return Game.model_validate(raw_game)
+
+    def _merge_packaged_seed(self, connection: sqlite3.Connection) -> None:
+        """Apply a newer curated seed without replacing existing catalog history."""
+        seed_file = files("steam_graveyard.resources").joinpath("games.json")
+        payload = json.loads(seed_file.read_text(encoding="utf-8"))
+        with connection:
+            source_ids: dict[str, int] = {}
+            source_id_map: dict[int, int] = {}
+            for raw_source in payload.get("sources", []):
+                source = Source.model_validate(raw_source)
+                database_id = self._upsert_source(connection, source)
+                source_ids[source.url] = database_id
+                if source.id is not None:
+                    source_id_map[source.id] = database_id
+
+            for original_game in payload.get("games", []):
+                candidate = self._seed_game(original_game, source_ids, source_id_map)
+                row = connection.execute(
+                    "SELECT * FROM games WHERE appid = ?", (candidate.appid,)
+                ).fetchone()
+                if row is None:
+                    self._upsert_game(connection, candidate)
+                    continue
+
+                existing = self._row_to_game(row)
+                updates: dict[str, object] = {}
+                aliases = list(dict.fromkeys([*existing.aliases, *candidate.aliases]))
+                if aliases != existing.aliases:
+                    updates["aliases"] = aliases
+                metadata = {**candidate.metadata, **existing.metadata}
+                if metadata != existing.metadata:
+                    updates["metadata"] = metadata
+                candidate_is_newer = candidate.last_verified is not None and (
+                    existing.last_verified is None
+                    or candidate.last_verified > existing.last_verified
+                )
+                if candidate.claim_status is not ClaimStatus.UNKNOWN and candidate_is_newer:
+                    updates.update(
+                        {
+                            "type": candidate.type,
+                            "claim_status": candidate.claim_status,
+                            "activation_method": candidate.activation_method,
+                            "activation_id": candidate.activation_id,
+                            "last_verified": candidate.last_verified,
+                            "verification_source_id": candidate.verification_source_id,
+                        }
+                    )
+                if updates:
+                    self._upsert_game(connection, existing.model_copy(update=updates))
+
+            for raw_verification in payload.get("verification_history", []):
+                verification = VerificationRecord.model_validate(raw_verification)
+                source_id = source_id_map.get(verification.source_id, verification.source_id)
+                exists = connection.execute(
+                    """
+                    SELECT 1 FROM verification_history
+                    WHERE appid = ? AND verified_at = ? AND claim_status = ?
+                      AND method = ? AND source_id = ?
+                    """,
+                    (
+                        verification.appid,
+                        verification.verified_at.isoformat(),
+                        verification.claim_status.value,
+                        verification.method,
+                        source_id,
+                    ),
+                ).fetchone()
+                if exists is None:
+                    connection.execute(
+                        """
+                        INSERT INTO verification_history(
+                            appid, verified_at, claim_status, method, source_id, notes
+                        ) VALUES (?, ?, ?, ?, ?, ?)
+                        """,
+                        (
+                            verification.appid,
+                            verification.verified_at.isoformat(),
+                            verification.claim_status.value,
+                            verification.method,
+                            source_id,
+                            verification.notes,
+                        ),
+                    )
+
+            for raw_event in payload.get("events", []):
+                event = Event.model_validate(raw_event)
+                exists = connection.execute(
+                    "SELECT 1 FROM events WHERE appid = ? AND event_type = ? AND timestamp = ?",
+                    (event.appid, event.event_type.value, event.timestamp.isoformat()),
+                ).fetchone()
+                if exists is None:
+                    self._insert_event(connection, event)
 
     @staticmethod
     def _upsert_source(connection: sqlite3.Connection, source: Source) -> int:
@@ -392,6 +518,7 @@ class GameRepository:
         offset: int = 0,
         claim_status: str | None = None,
         delisting_status: str | None = None,
+        content_type: str | None = None,
     ) -> list[Game]:
         clauses: list[str] = []
         values: list[object] = []
@@ -401,6 +528,9 @@ class GameRepository:
         if delisting_status:
             clauses.append("delisting_status = ?")
             values.append(delisting_status)
+        if content_type:
+            clauses.append("type = ?")
+            values.append(content_type)
         where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
         values.extend((limit, offset))
         with self.connection() as connection:
@@ -425,6 +555,9 @@ class GameRepository:
                 """
                 SELECT COUNT(*) AS game_count,
                        SUM(CASE WHEN claim_status = 'CLAIMABLE' THEN 1 ELSE 0 END) AS claimable,
+                       SUM(CASE WHEN type = 'dlc' THEN 1 ELSE 0 END) AS dlc,
+                       SUM(CASE WHEN type = 'demo' THEN 1 ELSE 0 END) AS demo,
+                       SUM(CASE WHEN delisting_status = 'DELISTED' THEN 1 ELSE 0 END) AS delisted,
                        MAX(last_seen) AS last_update
                 FROM games
                 """
@@ -432,6 +565,9 @@ class GameRepository:
         return DatasetStats(
             game_count=int(row["game_count"]),
             claimable_count=int(row["claimable"] or 0),
+            dlc_count=int(row["dlc"] or 0),
+            demo_count=int(row["demo"] or 0),
+            delisted_count=int(row["delisted"] or 0),
             last_update=_datetime(row["last_update"]),
         )
 

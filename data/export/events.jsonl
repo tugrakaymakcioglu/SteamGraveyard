@@ -1,1 +1,4 @@
 {"appid": 350280, "event_type": "DISCOVERED", "game_name": "LawBreakers", "id": 1, "metadata": {"classification": "unverified", "method": "curated_seed"}, "schema_version": 1, "timestamp": "2026-08-09T00:00:00+00:00"}
+{"appid": 440, "event_type": "CLAIMABLE_CONFIRMED", "game_name": "Team Fortress 2", "id": 2, "metadata": {"method": "official_store_review", "source_id": 2}, "schema_version": 1, "timestamp": "2026-08-09T00:00:00+00:00"}
+{"appid": 730, "event_type": "CLAIMABLE_CONFIRMED", "game_name": "Counter-Strike 2", "id": 3, "metadata": {"method": "official_store_review", "source_id": 3}, "schema_version": 1, "timestamp": "2026-08-09T00:00:00+00:00"}
+{"appid": 4421200, "event_type": "CLAIMABLE_CONFIRMED", "game_name": "We Were Here Tomorrow Demo", "id": 4, "metadata": {"method": "official_store_review", "source_id": 4}, "schema_version": 1, "timestamp": "2026-08-09T00:00:00+00:00"}

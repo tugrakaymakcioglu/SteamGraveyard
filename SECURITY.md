@@ -22,7 +22,11 @@ privately until a fix and disclosure timeline are ready.
 
 ## Security boundaries
 
-SteamGraveyard must never collect Steam credentials, persist Steam sessions, forge licenses, bypass
-DRM or ownership checks, or download protected depots. The only client integration in V1 is an
-operating-system request to open an allow-listed `steam://` URI. Steam remains responsible for every
-license and installation decision.
+SteamGraveyard must never collect Steam passwords, Steam Guard codes, cookies, account tokens, or
+Steam sessions; forge licenses; bypass DRM or ownership checks; or download protected depots. A
+standard Web API key is validated over HTTPS and stored in the operating system credential vault
+when available. It must never enter logs, datasets, screenshots, or issue reports.
+
+Client integration is limited to operating-system requests for allow-listed `steam://` URIs and
+explicitly requested HTTPS research pages. Steam remains responsible for every license and
+installation decision.

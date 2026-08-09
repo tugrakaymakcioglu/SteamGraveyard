@@ -3,12 +3,43 @@
   "generated_at": "2026-08-09T00:00:00+00:00",
   "sources": [
     {
+      "id": 1,
       "name": "Official LawBreakers Steam Community announcement",
       "url": "https://store.steampowered.com/news/?appgroupname=LawBreakers&appids=350280&feed=steam_community_announcements",
       "kind": "official",
       "retrieved_at": "2026-08-09T00:00:00+00:00",
       "metadata": {
         "note": "The announcement documents the service shutdown. It is not proof of current claimability or ownership."
+      }
+    },
+    {
+      "id": 2,
+      "name": "Official Team Fortress 2 Steam Store page",
+      "url": "https://store.steampowered.com/app/440/Team_Fortress_2/",
+      "kind": "official_store",
+      "retrieved_at": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "evidence": "The official store page displayed Free To Play and Play Game at verification time."
+      }
+    },
+    {
+      "id": 3,
+      "name": "Official Counter-Strike 2 Steam Store page",
+      "url": "https://store.steampowered.com/app/730/CounterStrike_2/",
+      "kind": "official_store",
+      "retrieved_at": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "evidence": "The official store page displayed Free To Play and Play Game at verification time."
+      }
+    },
+    {
+      "id": 4,
+      "name": "Official We Were Here Tomorrow Demo Steam Store page",
+      "url": "https://store.steampowered.com/app/4421200/We_Were_Here_Tomorrow_Demo/",
+      "kind": "official_store",
+      "retrieved_at": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "evidence": "The official store page identified this AppID as a Free Demo and displayed Install Demo at verification time."
       }
     }
   ],
@@ -38,6 +69,117 @@
         "safety_note": "Shutdown history alone does not establish current claimability or a Steam license."
       },
       "consecutive_missing_scans": 0
+    },
+    {
+      "appid": 440,
+      "name": "Team Fortress 2",
+      "aliases": [
+        "TF2"
+      ],
+      "type": "game",
+      "delisting_status": "ACTIVE",
+      "claim_status": "CLAIMABLE",
+      "activation_method": "install",
+      "activation_id": "440",
+      "first_seen": "2026-08-09T00:00:00+00:00",
+      "last_seen": "2026-08-09T00:00:00+00:00",
+      "delisted_at": null,
+      "relisted_at": null,
+      "last_verified": "2026-08-09T00:00:00+00:00",
+      "verification_source_id": 2,
+      "verification_source_url": "https://store.steampowered.com/app/440/Team_Fortress_2/",
+      "popularity_score": null,
+      "historical_peak_players": null,
+      "review_count": null,
+      "review_score": null,
+      "metadata": {
+        "source_url": "https://store.steampowered.com/app/440/Team_Fortress_2/",
+        "verification_note": "Free-to-play availability was verified on the official Steam Store. Steam still decides account eligibility."
+      },
+      "consecutive_missing_scans": 0
+    },
+    {
+      "appid": 730,
+      "name": "Counter-Strike 2",
+      "aliases": [
+        "CS2",
+        "Counter-Strike: Global Offensive"
+      ],
+      "type": "game",
+      "delisting_status": "ACTIVE",
+      "claim_status": "CLAIMABLE",
+      "activation_method": "install",
+      "activation_id": "730",
+      "first_seen": "2026-08-09T00:00:00+00:00",
+      "last_seen": "2026-08-09T00:00:00+00:00",
+      "delisted_at": null,
+      "relisted_at": null,
+      "last_verified": "2026-08-09T00:00:00+00:00",
+      "verification_source_id": 3,
+      "verification_source_url": "https://store.steampowered.com/app/730/CounterStrike_2/",
+      "popularity_score": null,
+      "historical_peak_players": null,
+      "review_count": null,
+      "review_score": null,
+      "metadata": {
+        "source_url": "https://store.steampowered.com/app/730/CounterStrike_2/",
+        "verification_note": "Free-to-play availability was verified on the official Steam Store. Steam still decides account eligibility."
+      },
+      "consecutive_missing_scans": 0
+    },
+    {
+      "appid": 4421200,
+      "name": "We Were Here Tomorrow Demo",
+      "aliases": [
+        "WWHT Demo"
+      ],
+      "type": "demo",
+      "delisting_status": "ACTIVE",
+      "claim_status": "CLAIMABLE",
+      "activation_method": "install",
+      "activation_id": "4421200",
+      "first_seen": "2026-08-09T00:00:00+00:00",
+      "last_seen": "2026-08-09T00:00:00+00:00",
+      "delisted_at": null,
+      "relisted_at": null,
+      "last_verified": "2026-08-09T00:00:00+00:00",
+      "verification_source_id": 4,
+      "verification_source_url": "https://store.steampowered.com/app/4421200/We_Were_Here_Tomorrow_Demo/",
+      "popularity_score": null,
+      "historical_peak_players": null,
+      "review_count": null,
+      "review_score": null,
+      "metadata": {
+        "source_url": "https://store.steampowered.com/app/4421200/We_Were_Here_Tomorrow_Demo/",
+        "verification_note": "Free demo availability was verified on the official Steam Store. Steam still decides account eligibility."
+      },
+      "consecutive_missing_scans": 0
+    }
+  ],
+  "verification_history": [
+    {
+      "appid": 440,
+      "verified_at": "2026-08-09T00:00:00+00:00",
+      "claim_status": "CLAIMABLE",
+      "method": "official_store_review",
+      "source_id": 2,
+      "notes": "Official Steam Store showed Free To Play and Play Game."
+    },
+    {
+      "appid": 730,
+      "verified_at": "2026-08-09T00:00:00+00:00",
+      "claim_status": "CLAIMABLE",
+      "method": "official_store_review",
+      "source_id": 3,
+      "notes": "Official Steam Store showed Free To Play and Play Game."
+    },
+    {
+      "appid": 4421200,
+      "verified_at": "2026-08-09T00:00:00+00:00",
+      "claim_status": "CLAIMABLE",
+      "method": "official_store_review",
+      "source_id": 4,
+      "notes": "Official Steam Store showed Free Demo and Install Demo."
     }
   ],
   "events": [
@@ -48,6 +190,33 @@
       "metadata": {
         "method": "curated_seed",
         "classification": "unverified"
+      }
+    },
+    {
+      "appid": 440,
+      "event_type": "CLAIMABLE_CONFIRMED",
+      "timestamp": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "method": "official_store_review",
+        "source_id": 2
+      }
+    },
+    {
+      "appid": 730,
+      "event_type": "CLAIMABLE_CONFIRMED",
+      "timestamp": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "method": "official_store_review",
+        "source_id": 3
+      }
+    },
+    {
+      "appid": 4421200,
+      "event_type": "CLAIMABLE_CONFIRMED",
+      "timestamp": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "method": "official_store_review",
+        "source_id": 4
       }
     }
   ]

@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from steam_graveyard.models import CatalogEntry, DelistingStatus, EventType, Game
+from steam_graveyard.models import CatalogEntry, ContentType, DelistingStatus, EventType, Game
 
 
 @dataclass(frozen=True, slots=True)
@@ -30,6 +30,7 @@ def diff_catalog(
     *,
     scanned_at: datetime,
     threshold: int,
+    tracked_content_types: set[ContentType] | None = None,
 ) -> DiffSummary:
     """Return durable state transitions for one successful, complete catalog scan."""
     if threshold < 2:
@@ -46,6 +47,7 @@ def diff_catalog(
             game = Game(
                 appid=appid,
                 name=entry.name,
+                type=entry.content_type,
                 delisting_status=DelistingStatus.ACTIVE,
                 first_seen=scanned_at,
                 last_seen=scanned_at,
@@ -82,14 +84,24 @@ def diff_catalog(
             }
         )
         updates["metadata"] = metadata
+        changed = False
         if old.name != entry.name:
             updates["name"] = entry.name
+            changed = True
+        if old.type is not entry.content_type:
+            updates["type"] = entry.content_type
+            changed = True
+        if changed:
             events.append(EventType.METADATA_CHANGED)
             metadata_changed += 1
         transitions.append(GameTransition(old.model_copy(update=updates), tuple(events)))
 
     for appid, old in existing.items():
-        if appid in current or old.delisting_status is DelistingStatus.DELISTED:
+        if (
+            appid in current
+            or old.delisting_status is DelistingStatus.DELISTED
+            or (tracked_content_types is not None and old.type not in tracked_content_types)
+        ):
             continue
         missing = old.consecutive_missing_scans + 1
         updates = {"consecutive_missing_scans": missing}

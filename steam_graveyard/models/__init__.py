@@ -2,6 +2,7 @@ from steam_graveyard.models.events import Event, EventType, Source, Verification
 from steam_graveyard.models.game import (
     ActivationMethod,
     ClaimStatus,
+    ContentType,
     DelistingStatus,
     Game,
     validate_uint32,
@@ -12,6 +13,7 @@ __all__ = [
     "ActivationMethod",
     "CatalogEntry",
     "ClaimStatus",
+    "ContentType",
     "DelistingStatus",
     "Event",
     "EventType",

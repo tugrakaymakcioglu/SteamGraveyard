@@ -12,7 +12,7 @@ runner = CliRunner()
 def test_version() -> None:
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "SteamGraveyard 0.1.0" in result.stdout
+    assert "SteamGraveyard 1.1.0" in result.stdout
 
 
 def test_cli_search_and_game_bootstrap_seed(tmp_path: Path) -> None:
@@ -31,10 +31,20 @@ def test_cli_invalid_appid_is_friendly(tmp_path: Path) -> None:
     assert "Traceback" not in result.stdout
 
 
-def test_cli_update_without_key_is_friendly(tmp_path: Path) -> None:
+def test_cli_update_without_key_is_friendly(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr("steam_graveyard.cli.commands.hydrate_api_key", lambda _settings: False)
     result = runner.invoke(app, ["--data-dir", str(tmp_path), "update"])
     assert result.exit_code == 4
     assert "STEAM_API_KEY is required" in result.stdout
+
+
+def test_cli_category_is_validated(tmp_path: Path) -> None:
+    valid = runner.invoke(app, ["--data-dir", str(tmp_path), "category", "games"])
+    assert valid.exit_code == 0
+    assert "LawBreakers" in valid.stdout
+    invalid = runner.invoke(app, ["--data-dir", str(tmp_path), "category", "unknown"])
+    assert invalid.exit_code == 2
+    assert "category must be" in invalid.stdout
 
 
 def test_cli_export(tmp_path: Path) -> None:

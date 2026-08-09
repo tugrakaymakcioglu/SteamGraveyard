@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "steam-graveyard"
-version = "0.1.0"
+version = "1.1.0"
 description = "Discover forgotten Steam games from a fast, local-first terminal interface."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -26,6 +26,7 @@ classifiers = [
 ]
 dependencies = [
   "httpx>=0.28,<1",
+  "keyring>=25.7,<26",
   "platformdirs>=4.5,<5",
   "pydantic>=2.12,<3",
   "pydantic-settings>=2.11,<3",

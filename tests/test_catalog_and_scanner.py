@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import timedelta
 
 import httpx
@@ -8,7 +9,7 @@ import pytest
 from steam_graveyard.config import Settings
 from steam_graveyard.database.repository import GameRepository
 from steam_graveyard.errors import CatalogError, ConfigurationError, SnapshotSafetyError
-from steam_graveyard.models import CatalogEntry, Game
+from steam_graveyard.models import CatalogEntry, ContentType, Game
 from steam_graveyard.services.scanner import update_catalog
 from steam_graveyard.steam.catalog import SteamCatalogClient
 
@@ -51,6 +52,44 @@ async def test_catalog_client_paginates() -> None:
     entries = await client.fetch_all_games()
     assert [entry.appid for entry in entries] == [1, 2]
     assert requests == 2
+
+
+@pytest.mark.asyncio
+async def test_catalog_fetches_games_and_dlc_as_separate_types() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.url.params["input_json"])
+        appid = 2 if body["include_dlc"] else 1
+        name = "DLC" if body["include_dlc"] else "Game"
+        return httpx.Response(
+            200,
+            json={
+                "response": {
+                    "apps": [{"appid": appid, "name": name}],
+                    "have_more_results": False,
+                }
+            },
+        )
+
+    client = SteamCatalogClient("a" * 32, client_factory=client_factory(handler))
+    entries = await client.fetch_all_content()
+    assert [(entry.appid, entry.content_type) for entry in entries] == [
+        (1, ContentType.GAME),
+        (2, ContentType.DLC),
+    ]
+
+
+@pytest.mark.asyncio
+async def test_api_key_validation_is_small_and_friendly() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.url.params["input_json"])
+        assert body["max_results"] == 1
+        return httpx.Response(403)
+
+    secret = "b" * 32
+    client = SteamCatalogClient(secret, max_retries=0, client_factory=client_factory(handler))
+    result = await client.validate_api_key()
+    assert not result.valid
+    assert secret not in result.message
 
 
 @pytest.mark.asyncio
@@ -129,7 +168,7 @@ class FakeCatalogClient:
         self.entries = entries or []
         self.error = error
 
-    async def fetch_all_games(self) -> list[CatalogEntry]:
+    async def fetch_all_content(self) -> list[CatalogEntry]:
         if self.error:
             raise self.error
         return self.entries

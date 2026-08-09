@@ -13,7 +13,7 @@ from pathlib import Path
 from steam_graveyard.config import Settings
 from steam_graveyard.database.repository import GameRepository
 from steam_graveyard.errors import SnapshotSafetyError, SteamGraveyardError
-from steam_graveyard.models import CatalogEntry, ScanResult
+from steam_graveyard.models import CatalogEntry, ContentType, ScanResult
 from steam_graveyard.services.differ import diff_catalog
 from steam_graveyard.services.exporter import DatasetExporter
 from steam_graveyard.steam.catalog import SteamCatalogClient
@@ -61,7 +61,7 @@ async def update_catalog(
         timeout=settings.request_timeout,
     )
     try:
-        entries = await catalog_client.fetch_all_games()
+        entries = await catalog_client.fetch_all_content()
         previous_count = repository.last_successful_scan_count() or repository.stats().game_count
         if previous_count and len(entries) < previous_count * settings.minimum_snapshot_ratio:
             raise SnapshotSafetyError(
@@ -75,6 +75,7 @@ async def update_catalog(
             entries,
             scanned_at=finished_at,
             threshold=settings.delisting_threshold,
+            tracked_content_types={ContentType.GAME, ContentType.DLC},
         )
         repository.apply_scan(
             scan_id,

@@ -1,25 +1,57 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title description">
-  <title id="title">SteamGraveyard terminal interface preview</title>
-  <description id="description">A dark terminal window showing the game catalog, status, popularity, and controls.</description>
+  <title id="title">SteamGraveyard 1.1 terminal interface preview</title>
+  <description id="description">A dark terminal catalog with category selection, games, content types, verification status, and controls.</description>
   <rect width="1200" height="690" rx="18" fill="#080b10"/>
   <rect width="1200" height="48" rx="18" fill="#151d29"/>
-  <circle cx="28" cy="24" r="7" fill="#ff6b6b"/><circle cx="52" cy="24" r="7" fill="#ffd166"/><circle cx="76" cy="24" r="7" fill="#5fd7af"/>
-  <text x="600" y="30" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, monospace" font-size="15">steam-graveyard</text>
-  <text x="600" y="104" text-anchor="middle" fill="#66d9ef" font-family="ui-monospace, monospace" font-weight="700" font-size="30">STEAM GRAVEYARD</text>
-  <text x="600" y="134" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, monospace" font-size="17">Discover forgotten Steam games.</text>
-  <rect x="38" y="164" width="1124" height="52" rx="5" fill="#101620"/>
-  <text x="60" y="196" fill="#b5c1d1" font-family="ui-monospace, monospace" font-size="16">1 game  •  0 claimable  •  LOCAL DATA  •  Ctrl+S Search</text>
-  <rect x="38" y="240" width="1124" height="328" rx="7" fill="#0d121a" stroke="#253348"/>
-  <rect x="39" y="241" width="1122" height="48" rx="6" fill="#151d29"/>
-  <g fill="#66d9ef" font-family="ui-monospace, monospace" font-weight="700" font-size="16">
-    <text x="68" y="271">RANK</text><text x="164" y="271">GAME</text><text x="580" y="271">STATUS</text><text x="826" y="271">POPULARITY</text><text x="990" y="271">VERIFIED</text>
+  <circle cx="28" cy="24" r="7" fill="#ff6b6b"/>
+  <circle cx="52" cy="24" r="7" fill="#ffd166"/>
+  <circle cx="76" cy="24" r="7" fill="#5fd7af"/>
+  <text x="600" y="30" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, monospace" font-size="15">steam-graveyard 1.1</text>
+  <text x="600" y="98" text-anchor="middle" fill="#66d9ef" font-family="ui-monospace, monospace" font-weight="700" font-size="30">STEAM GRAVEYARD</text>
+  <text x="600" y="128" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, monospace" font-size="17">Discover forgotten Steam games.</text>
+  <rect x="38" y="150" width="1124" height="48" rx="5" fill="#101620"/>
+  <text x="60" y="180" fill="#b5c1d1" font-family="ui-monospace, monospace" font-size="15">4 items  |  3 verified free  |  1 demo  |  updated 2026-08-09</text>
+  <rect x="38" y="212" width="330" height="44" rx="5" fill="#0d121a" stroke="#38465a"/>
+  <text x="58" y="240" fill="#d7dee9" font-family="ui-monospace, monospace" font-size="15">CATEGORY: ALL CONTENT              v</text>
+  <rect x="38" y="274" width="1124" height="290" rx="7" fill="#0d121a" stroke="#253348"/>
+  <rect x="39" y="275" width="1122" height="46" rx="6" fill="#151d29"/>
+  <g fill="#66d9ef" font-family="ui-monospace, monospace" font-weight="700" font-size="15">
+    <text x="66" y="304">RANK</text>
+    <text x="146" y="304">TITLE</text>
+    <text x="522" y="304">TYPE</text>
+    <text x="628" y="304">STATUS</text>
+    <text x="858" y="304">POPULARITY</text>
+    <text x="1026" y="304">VERIFIED</text>
   </g>
-  <rect x="50" y="310" width="1100" height="52" rx="4" fill="#253348"/>
-  <g fill="#f1f5f9" font-family="ui-monospace, monospace" font-size="17">
-    <text x="78" y="343">1</text><text x="164" y="343">LawBreakers</text><text x="580" y="343" fill="#8b949e">? UNKNOWN</text><text x="862" y="343">—</text><text x="1006" y="343">—</text>
+  <rect x="50" y="337" width="1100" height="52" rx="4" fill="#253348"/>
+  <g fill="#f1f5f9" font-family="ui-monospace, monospace" font-size="16">
+    <text x="78" y="370">1</text>
+    <text x="146" y="370">Counter-Strike 2</text>
+    <text x="522" y="370">GAME</text>
+    <text x="628" y="370" fill="#5fd7af">ACTIVE / CLAIMABLE</text>
+    <text x="902" y="370">--</text>
+    <text x="1026" y="370">2026-08-09</text>
+    <text x="78" y="426">2</text>
+    <text x="146" y="426">Team Fortress 2</text>
+    <text x="522" y="426">GAME</text>
+    <text x="628" y="426" fill="#5fd7af">ACTIVE / CLAIMABLE</text>
+    <text x="902" y="426">--</text>
+    <text x="1026" y="426">2026-08-09</text>
+    <text x="78" y="482">3</text>
+    <text x="146" y="482">We Were Here Tomorrow Demo</text>
+    <text x="522" y="482">DEMO</text>
+    <text x="628" y="482" fill="#5fd7af">ACTIVE / CLAIMABLE</text>
+    <text x="902" y="482">--</text>
+    <text x="1026" y="482">2026-08-09</text>
+    <text x="78" y="538">4</text>
+    <text x="146" y="538">LawBreakers</text>
+    <text x="522" y="538">GAME</text>
+    <text x="628" y="538" fill="#8b949e">UNKNOWN</text>
+    <text x="902" y="538">--</text>
+    <text x="1026" y="538">--</text>
   </g>
-  <text x="1138" y="602" text-anchor="end" fill="#5fd7af" font-family="ui-monospace, monospace" font-size="14">ONLINE • LOCAL DATA</text>
+  <text x="1138" y="598" text-anchor="end" fill="#5fd7af" font-family="ui-monospace, monospace" font-size="14">ONLINE | LOCAL DATA</text>
   <rect x="0" y="626" width="1200" height="64" rx="18" fill="#101620"/>
-  <text x="42" y="664" fill="#b5c1d1" font-family="ui-monospace, monospace" font-size="15">↑↓ Navigate   Ctrl+S Search   Enter Select   R Refresh   Q Quit</text>
-  <text x="1158" y="664" text-anchor="end" fill="#637083" font-family="ui-monospace, monospace" font-size="13">INTERFACE PREVIEW</text>
+  <text x="42" y="664" fill="#b5c1d1" font-family="ui-monospace, monospace" font-size="15">UP/DOWN Navigate   Enter Select   Ctrl+S Search   R Refresh   Q Quit</text>
+  <text x="1158" y="664" text-anchor="end" fill="#637083" font-family="ui-monospace, monospace" font-size="13">V1.1 PREVIEW</text>
 </svg>

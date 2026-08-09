@@ -7,7 +7,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field, field_validator
 
-from steam_graveyard.models.game import validate_uint32
+from steam_graveyard.models.game import ContentType, validate_uint32
 
 
 class CatalogEntry(BaseModel):
@@ -15,6 +15,7 @@ class CatalogEntry(BaseModel):
     name: str = Field(min_length=1, max_length=500)
     last_modified: int | None = None
     price_change_number: int | None = None
+    content_type: ContentType = ContentType.GAME
 
     @field_validator("appid", mode="before")
     @classmethod

@@ -17,7 +17,14 @@ from steam_graveyard.config import Settings
 from steam_graveyard.database.repository import GameRepository
 from steam_graveyard.errors import SteamGraveyardError
 from steam_graveyard.logging_config import configure_logging
-from steam_graveyard.models import ClaimStatus, DelistingStatus, Game, validate_uint32
+from steam_graveyard.models import (
+    ClaimStatus,
+    ContentType,
+    DelistingStatus,
+    Game,
+    validate_uint32,
+)
+from steam_graveyard.services.credentials import KeyringCredentialStore, hydrate_api_key
 from steam_graveyard.services.exporter import DatasetExporter
 from steam_graveyard.services.scanner import update_catalog
 from steam_graveyard.services.search import SearchService
@@ -57,6 +64,7 @@ def _games_table(games: list[Game]) -> Table:
     table = Table(show_header=True, header_style="bold cyan")
     table.add_column("AppID", justify="right")
     table.add_column("Game")
+    table.add_column("Type")
     table.add_column("Catalog")
     table.add_column("Claim")
     table.add_column("Popularity", justify="right")
@@ -64,6 +72,7 @@ def _games_table(games: list[Game]) -> Table:
         table.add_row(
             str(game.appid),
             game.name,
+            game.type.value.upper(),
             game.delisting_status.value.replace("_", " "),
             game.claim_status.value.replace("_", " "),
             "N/A" if game.popularity_score is None else f"{game.popularity_score:.1f}",
@@ -125,6 +134,7 @@ def game_command(ctx: typer.Context, appid: str) -> None:
     uri = build_steam_uri(game.activation_method, game.activation_id)
     console.print(f"[bold cyan]{game.name}[/]")
     console.print(f"AppID: {game.appid}")
+    console.print(f"Content Type: {game.type.value.upper()}")
     console.print(f"Catalog Status: {game.delisting_status.value}")
     console.print(f"Claim Status: {claim_label(game, stale_days=current.settings.stale_days)}")
     console.print(
@@ -165,6 +175,43 @@ def claimable_command(
     )
 
 
+@app.command("category")
+def category_command(
+    ctx: typer.Context,
+    category: Annotated[
+        str,
+        typer.Argument(help="One of: games, dlc, demos, free, delisted."),
+    ],
+    limit: Annotated[int, typer.Option(min=1, max=1000)] = 200,
+) -> None:
+    current: AppContext = ctx.obj
+    normalized = category.strip().casefold()
+    filters: dict[str, str] = {}
+    if normalized == "games":
+        filters["content_type"] = ContentType.GAME.value
+    elif normalized == "dlc":
+        filters["content_type"] = ContentType.DLC.value
+    elif normalized == "demos":
+        filters["content_type"] = ContentType.DEMO.value
+    elif normalized == "free":
+        filters["claim_status"] = ClaimStatus.CLAIMABLE.value
+    elif normalized == "delisted":
+        filters["delisting_status"] = DelistingStatus.DELISTED.value
+    else:
+        _fail(ValueError("category must be games, dlc, demos, free, or delisted"), code=2)
+        return
+    console.print(
+        _games_table(
+            current.repository.list_games(
+                limit=limit,
+                claim_status=filters.get("claim_status"),
+                delisting_status=filters.get("delisting_status"),
+                content_type=filters.get("content_type"),
+            )
+        )
+    )
+
+
 @app.command("delisted")
 def delisted_command(
     ctx: typer.Context,
@@ -183,15 +230,38 @@ def delisted_command(
 @app.command("update")
 def update_command(ctx: typer.Context) -> None:
     current: AppContext = ctx.obj
+    hydrate_api_key(current.settings)
     try:
         result = asyncio.run(update_catalog(current.repository, current.settings))
     except SteamGraveyardError as exc:
         _fail(exc, code=4)
         return
     console.print(
-        f"[green]Updated {result.app_count:,} games.[/] "
+        f"[green]Updated {result.app_count:,} games and DLC items.[/] "
         f"Added {result.added}, suspected {result.suspected}, "
         f"delisted {result.delisted}, relisted {result.relisted}."
+    )
+
+
+@app.command("setup")
+def setup_command(ctx: typer.Context) -> None:
+    """Open the guided API key setup again."""
+    current: AppContext = ctx.obj
+    run_tui(
+        settings=current.settings,
+        repository=current.repository,
+        force_setup=True,
+    )
+
+
+@app.command("forget-key")
+def forget_key_command() -> None:
+    """Remove the API key from the operating system credential vault."""
+    result = KeyringCredentialStore().delete()
+    style = "green" if result.persisted else "yellow"
+    console.print(f"[{style}]{result.message}[/]")
+    console.print(
+        "[dim]Keys supplied through STEAM_API_KEY or .env are not changed by this command.[/]"
     )
 
 

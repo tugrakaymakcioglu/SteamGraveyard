@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from steam_graveyard.models import CatalogEntry, DelistingStatus, EventType, Game
+from steam_graveyard.models import CatalogEntry, ContentType, DelistingStatus, EventType, Game
 from steam_graveyard.services.differ import diff_catalog
 
 
@@ -53,3 +53,15 @@ def test_metadata_change_emits_event(now) -> None:
     )
     assert diff.metadata_changed == 1
     assert EventType.METADATA_CHANGED in diff.transitions[0].event_types
+
+
+def test_official_scan_does_not_mark_curated_demo_missing(now) -> None:
+    demo = Game(appid=20, name="Demo", type=ContentType.DEMO, first_seen=now, last_seen=now)
+    diff = diff_catalog(
+        [demo],
+        [],
+        scanned_at=now + timedelta(days=1),
+        threshold=3,
+        tracked_content_types={ContentType.GAME, ContentType.DLC},
+    )
+    assert diff.transitions == ()

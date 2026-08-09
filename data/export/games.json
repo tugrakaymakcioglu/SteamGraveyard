@@ -1,6 +1,61 @@
 {
   "games": [
     {
+      "activation_id": "440",
+      "activation_method": "install",
+      "aliases": [
+        "TF2"
+      ],
+      "appid": 440,
+      "claim_status": "CLAIMABLE",
+      "consecutive_missing_scans": 0,
+      "delisted_at": null,
+      "delisting_status": "ACTIVE",
+      "first_seen": "2026-08-09T00:00:00Z",
+      "historical_peak_players": null,
+      "last_seen": "2026-08-09T00:00:00Z",
+      "last_verified": "2026-08-09T00:00:00Z",
+      "metadata_json": {
+        "source_url": "https://store.steampowered.com/app/440/Team_Fortress_2/",
+        "verification_note": "Free-to-play availability was verified on the official Steam Store. Steam still decides account eligibility."
+      },
+      "name": "Team Fortress 2",
+      "popularity_score": null,
+      "relisted_at": null,
+      "review_count": null,
+      "review_score": null,
+      "type": "game",
+      "verification_source_id": 2
+    },
+    {
+      "activation_id": "730",
+      "activation_method": "install",
+      "aliases": [
+        "CS2",
+        "Counter-Strike: Global Offensive"
+      ],
+      "appid": 730,
+      "claim_status": "CLAIMABLE",
+      "consecutive_missing_scans": 0,
+      "delisted_at": null,
+      "delisting_status": "ACTIVE",
+      "first_seen": "2026-08-09T00:00:00Z",
+      "historical_peak_players": null,
+      "last_seen": "2026-08-09T00:00:00Z",
+      "last_verified": "2026-08-09T00:00:00Z",
+      "metadata_json": {
+        "source_url": "https://store.steampowered.com/app/730/CounterStrike_2/",
+        "verification_note": "Free-to-play availability was verified on the official Steam Store. Steam still decides account eligibility."
+      },
+      "name": "Counter-Strike 2",
+      "popularity_score": null,
+      "relisted_at": null,
+      "review_count": null,
+      "review_score": null,
+      "type": "game",
+      "verification_source_id": 3
+    },
+    {
       "activation_id": null,
       "activation_method": "none",
       "aliases": [],
@@ -24,9 +79,36 @@
       "review_score": null,
       "type": "game",
       "verification_source_id": null
+    },
+    {
+      "activation_id": "4421200",
+      "activation_method": "install",
+      "aliases": [
+        "WWHT Demo"
+      ],
+      "appid": 4421200,
+      "claim_status": "CLAIMABLE",
+      "consecutive_missing_scans": 0,
+      "delisted_at": null,
+      "delisting_status": "ACTIVE",
+      "first_seen": "2026-08-09T00:00:00Z",
+      "historical_peak_players": null,
+      "last_seen": "2026-08-09T00:00:00Z",
+      "last_verified": "2026-08-09T00:00:00Z",
+      "metadata_json": {
+        "source_url": "https://store.steampowered.com/app/4421200/We_Were_Here_Tomorrow_Demo/",
+        "verification_note": "Free demo availability was verified on the official Steam Store. Steam still decides account eligibility."
+      },
+      "name": "We Were Here Tomorrow Demo",
+      "popularity_score": null,
+      "relisted_at": null,
+      "review_count": null,
+      "review_score": null,
+      "type": "demo",
+      "verification_source_id": 4
     }
   ],
-  "generated_at": "2026-08-09T01:58:03.401484+00:00",
+  "generated_at": "2026-08-09T00:00:00+00:00",
   "schema_version": 1,
   "sources": [
     {
@@ -38,7 +120,65 @@
       "name": "Official LawBreakers Steam Community announcement",
       "retrieved_at": "2026-08-09T00:00:00Z",
       "url": "https://store.steampowered.com/news/?appgroupname=LawBreakers&appids=350280&feed=steam_community_announcements"
+    },
+    {
+      "id": 2,
+      "kind": "official_store",
+      "metadata": {
+        "evidence": "The official store page displayed Free To Play and Play Game at verification time."
+      },
+      "name": "Official Team Fortress 2 Steam Store page",
+      "retrieved_at": "2026-08-09T00:00:00Z",
+      "url": "https://store.steampowered.com/app/440/Team_Fortress_2/"
+    },
+    {
+      "id": 3,
+      "kind": "official_store",
+      "metadata": {
+        "evidence": "The official store page displayed Free To Play and Play Game at verification time."
+      },
+      "name": "Official Counter-Strike 2 Steam Store page",
+      "retrieved_at": "2026-08-09T00:00:00Z",
+      "url": "https://store.steampowered.com/app/730/CounterStrike_2/"
+    },
+    {
+      "id": 4,
+      "kind": "official_store",
+      "metadata": {
+        "evidence": "The official store page identified this AppID as a Free Demo and displayed Install Demo at verification time."
+      },
+      "name": "Official We Were Here Tomorrow Demo Steam Store page",
+      "retrieved_at": "2026-08-09T00:00:00Z",
+      "url": "https://store.steampowered.com/app/4421200/We_Were_Here_Tomorrow_Demo/"
     }
   ],
-  "verification_history": []
+  "verification_history": [
+    {
+      "appid": 440,
+      "claim_status": "CLAIMABLE",
+      "id": 1,
+      "method": "official_store_review",
+      "notes": "Official Steam Store showed Free To Play and Play Game.",
+      "source_id": 2,
+      "verified_at": "2026-08-09T00:00:00Z"
+    },
+    {
+      "appid": 730,
+      "claim_status": "CLAIMABLE",
+      "id": 2,
+      "method": "official_store_review",
+      "notes": "Official Steam Store showed Free To Play and Play Game.",
+      "source_id": 3,
+      "verified_at": "2026-08-09T00:00:00Z"
+    },
+    {
+      "appid": 4421200,
+      "claim_status": "CLAIMABLE",
+      "id": 3,
+      "method": "official_store_review",
+      "notes": "Official Steam Store showed Free Demo and Install Demo.",
+      "source_id": 4,
+      "verified_at": "2026-08-09T00:00:00Z"
+    }
+  ]
 }

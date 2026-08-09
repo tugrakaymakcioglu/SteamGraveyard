@@ -48,13 +48,19 @@ class ActivationMethod(StrEnum):
     NONE = "none"
 
 
+class ContentType(StrEnum):
+    GAME = "game"
+    DLC = "dlc"
+    DEMO = "demo"
+
+
 class Game(BaseModel):
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
     appid: int
     name: str = Field(min_length=1, max_length=500)
     aliases: list[str] = Field(default_factory=list)
-    type: str = Field(default="game", min_length=1, max_length=64)
+    type: ContentType = ContentType.GAME
     delisting_status: DelistingStatus = DelistingStatus.UNKNOWN
     claim_status: ClaimStatus = ClaimStatus.UNKNOWN
     activation_method: ActivationMethod = ActivationMethod.NONE

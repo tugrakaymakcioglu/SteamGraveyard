@@ -8,6 +8,7 @@ quality and user safety matter just as much.
 - Never add code that requests Steam passwords, Steam Guard data, session cookies, or account tokens.
 - Never implement DRM, ownership, payment, depot, manifest, or license bypasses.
 - Never label a record `CLAIMABLE` without a current, reviewable source and verification timestamp.
+- Never scrape SteamDB; use Valve sources or open SteamDB only as a manual research reference.
 - Prefer `UNKNOWN` when evidence is incomplete or conflicting.
 - Keep unrelated changes out of a pull request.
 
@@ -18,7 +19,7 @@ python -m venv .venv
 python -m pip install -e ".[dev]"
 ruff check .
 ruff format --check .
-mypy steam_graveyard
+mypy steam_graveyard scripts
 pytest
 ```
 
