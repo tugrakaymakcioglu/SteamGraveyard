@@ -1,0 +1,47 @@
+name: Dataset correction
+description: Propose a sourced correction to a game, event, or verification record.
+title: "[Data]: "
+labels: [data, needs-verification]
+body:
+  - type: input
+    id: appid
+    attributes:
+      label: AppID
+      placeholder: "350280"
+    validations:
+      required: true
+  - type: dropdown
+    id: field
+    attributes:
+      label: Field to correct
+      options: [Name or aliases, Delisting status, Claim status, Activation method, Dates, Popularity metadata, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Proposed correction
+      description: State the current value, proposed value, and why it should change.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Original source URL
+      description: Prefer Valve, Steam, or the publisher/developer's original announcement.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: What does the source prove?
+      description: A working URI or known AppID is not proof of claimability or ownership.
+    validations:
+      required: true
+  - type: checkboxes
+    id: confidence
+    attributes:
+      label: Evidence check
+      options:
+        - label: I did not infer claimability from an AppID, URI, or unsourced list.
+          required: true

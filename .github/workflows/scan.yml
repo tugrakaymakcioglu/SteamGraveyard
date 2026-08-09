@@ -1,0 +1,57 @@
+name: Steam catalog scan
+
+on:
+  schedule:
+    - cron: "17 3 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: steam-catalog-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+      AUTO_COMMIT: ${{ vars.STEAM_GRAVEYARD_AUTO_COMMIT }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Check catalog credentials
+        id: preflight
+        shell: bash
+        run: |
+          if [ -z "$STEAM_API_KEY" ]; then
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "## Catalog scan skipped" >> "$GITHUB_STEP_SUMMARY"
+            echo "The STEAM_API_KEY repository secret is not configured." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install project
+        if: steps.preflight.outputs.available == 'true'
+        run: python -m pip install .
+      - name: Update catalog and exports
+        if: steps.preflight.outputs.available == 'true'
+        run: steam-graveyard --data-dir data update
+      - name: Commit changed exports
+        if: steps.preflight.outputs.available == 'true' && env.AUTO_COMMIT == 'true'
+        shell: bash
+        run: |
+          if git diff --quiet -- data/export; then
+            echo "No export changes to commit." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name "steam-graveyard-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/export
+          git commit -m "Update Steam catalog exports"
+          git push

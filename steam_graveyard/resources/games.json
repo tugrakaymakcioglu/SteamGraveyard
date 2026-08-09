@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-09T00:00:00+00:00",
+  "sources": [
+    {
+      "name": "Official LawBreakers Steam Community announcement",
+      "url": "https://store.steampowered.com/news/?appgroupname=LawBreakers&appids=350280&feed=steam_community_announcements",
+      "kind": "official",
+      "retrieved_at": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "note": "The announcement documents the service shutdown. It is not proof of current claimability or ownership."
+      }
+    }
+  ],
+  "games": [
+    {
+      "appid": 350280,
+      "name": "LawBreakers",
+      "aliases": [],
+      "type": "game",
+      "delisting_status": "UNKNOWN",
+      "claim_status": "UNKNOWN",
+      "activation_method": "none",
+      "activation_id": null,
+      "first_seen": "2026-08-09T00:00:00+00:00",
+      "last_seen": "2026-08-09T00:00:00+00:00",
+      "delisted_at": null,
+      "relisted_at": null,
+      "last_verified": null,
+      "verification_source_id": null,
+      "verification_source_url": "https://store.steampowered.com/news/?appgroupname=LawBreakers&appids=350280&feed=steam_community_announcements",
+      "popularity_score": null,
+      "historical_peak_players": null,
+      "review_count": null,
+      "review_score": null,
+      "metadata": {
+        "source_url": "https://store.steampowered.com/news/?appgroupname=LawBreakers&appids=350280&feed=steam_community_announcements",
+        "safety_note": "Shutdown history alone does not establish current claimability or a Steam license."
+      },
+      "consecutive_missing_scans": 0
+    }
+  ],
+  "events": [
+    {
+      "appid": 350280,
+      "event_type": "DISCOVERED",
+      "timestamp": "2026-08-09T00:00:00+00:00",
+      "metadata": {
+        "method": "curated_seed",
+        "classification": "unverified"
+      }
+    }
+  ]
+}
