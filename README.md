@@ -1,26 +1,20 @@
 <div align="center">
 
-```text
-  _________ __                         ________                              .___
- /   _____//  |_  ____ _____    _____ /  _____/___________ ___  _______  ___| _/
- \_____  \\   __\/ __ \\__  \  /     /   \  __\_  __ \__  \\ \_  __ \/ __ |
- /        \|  | \  ___/ / __ \|  Y Y \    \_\  \  | \// __ \_|  | \/ /_/ |
-/_______  /|__|  \___  >____  /__|_|  /\______  /__|  (____  /|__|  \____ |
-        \/           \/     \/      \/        \/           \/            \/
-```
+<img src="docs/images/banner.png" alt="SteamGraveyard - Discover Delisted & Forgotten Steam Games" width="100%" />
 
-# SteamGraveyard
+# ⚰️ SteamGraveyard
 
-**Discover forgotten Steam games.**
-
-A guided, local-first terminal catalog for researching delisted Steam games,
-browsing games, DLC, and demos, and opening only verified Steam-supported actions.
+### Discover Delisted, Removed & Forgotten Steam Games, Demos & DLCs in a Fast Local-First Terminal TUI
 
 [![CI](https://github.com/tugrakaymakcioglu/SteamGraveyard/actions/workflows/tests.yml/badge.svg)](https://github.com/tugrakaymakcioglu/SteamGraveyard/actions/workflows/tests.yml)
-[![Version 0.1.1](https://img.shields.io/badge/version-0.1.1-66d9ef)](CHANGELOG.md)
-[![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg)](LICENSE)
-[![Textual](https://img.shields.io/badge/UI-Textual-6f42c1)](https://textual.textualize.io/)
+[![Version 0.1.1](https://img.shields.io/badge/version-0.1.1-66d9ef?style=flat-square)](CHANGELOG.md)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-2ea44f.svg?style=flat-square)](LICENSE)
+[![Textual TUI](https://img.shields.io/badge/UI-Textual%20TUI-6f42c1?style=flat-square)](https://textual.textualize.io/)
+[![SteamDB Linked](https://img.shields.io/badge/Data-SteamDB%20Integrated-00ADEE?style=flat-square)](https://steamdb.info/)
+[![Windows 1-Click](https://img.shields.io/badge/Windows-1--Click%20Launcher%20(.bat)-informational?style=flat-square)](#windows--easiest-path)
+
+[Türkçe Dokümantasyon](README.tr.md) &nbsp;·&nbsp; [1-Click Windows Setup](#windows--easiest-path) &nbsp;·&nbsp; [Install](#install) &nbsp;·&nbsp; [Quickstart](#quick-start) &nbsp;·&nbsp; [Keyboard Controls](#keyboard-controls)
 
 </div>
 

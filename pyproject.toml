@@ -5,17 +5,40 @@ build-backend = "hatchling.build"
 [project]
 name = "steam-graveyard"
 version = "0.1.1"
-description = "Discover forgotten Steam games from a fast, local-first terminal interface."
+description = "Discover delisted, removed & forgotten Steam games, hidden demos & DLCs. Fast local-first terminal TUI catalog with SteamDB links & official client actions."
 readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 authors = [
   { name = "Tugra Kaymakcioglu" },
 ]
-keywords = ["steam", "delisted-games", "tui", "cli", "textual"]
+keywords = [
+  "steam",
+  "delisted-games",
+  "steamdb",
+  "game-preservation",
+  "abandonware",
+  "textual",
+  "tui",
+  "terminal-app",
+  "retro-gaming",
+  "video-games",
+  "steam-games",
+  "steam-api",
+  "catalog",
+  "game-archaeology",
+  "offline-first",
+  "sqlite-fts5",
+  "python-tui",
+  "rich",
+  "cli",
+  "gaming-tools"
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
@@ -23,6 +46,7 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Topic :: Games/Entertainment",
+  "Topic :: Utilities",
 ]
 dependencies = [
   "httpx>=0.28,<1",
@@ -53,8 +77,9 @@ steam-graveyard = "steam_graveyard.cli.commands:app"
 
 [project.urls]
 Homepage = "https://github.com/tugrakaymakcioglu/SteamGraveyard"
-Issues = "https://github.com/tugrakaymakcioglu/SteamGraveyard/issues"
 Repository = "https://github.com/tugrakaymakcioglu/SteamGraveyard.git"
+Issues = "https://github.com/tugrakaymakcioglu/SteamGraveyard/issues"
+Changelog = "https://github.com/tugrakaymakcioglu/SteamGraveyard/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["steam_graveyard"]
